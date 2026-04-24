@@ -224,10 +224,10 @@
 </div>
 
 <div class="nav">
-  <button class="nav-tab on" onclick="goPage('profit')">수익구조 계산기</button>
-  <button class="nav-tab" onclick="goPage('enroll')">입반 조건</button>
-  <button class="nav-tab" onclick="goPage('expel')">퇴출 기준</button>
-  <button class="nav-tab" onclick="goPage('refund')">환불 약관</button>
+  <button class="nav-tab on" onclick="goPage('profit', this)">수익구조 계산기</button>
+  <button class="nav-tab" onclick="goPage('enroll', this)">입반 조건</button>
+  <button class="nav-tab" onclick="goPage('expel', this)">퇴출 기준</button>
+  <button class="nav-tab" onclick="goPage('refund', this)">환불 약관</button>
 </div>
 
 <div class="content">
@@ -643,11 +643,11 @@ function runSim() {
 }
 
 /* ── 페이지 전환 ── */
-function goPage(id) {
+function goPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('on'));
   document.getElementById(id).classList.add('on');
-  event.target.classList.add('on');
+  if (btn) btn.classList.add('on');
 }
 
 /* ── 초기화 ── */
