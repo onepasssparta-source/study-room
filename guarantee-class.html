@@ -3,217 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>합격보장반 운영 시스템</title>
+<title>합격보장반 운영 시스템 — 대전점</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-
-  :root {
-    --bg: #f7f6f3;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: #e2e0d8;
-    --border2: #cccac0;
-    --text: #1a1917;
-    --text2: #6b6960;
-    --text3: #9b9990;
-    --accent: #2563eb;
-    --accent-bg: #eff6ff;
-    --accent-text: #1d4ed8;
-    --warn: #d97706;
-    --warn-bg: #fffbeb;
-    --warn-text: #92400e;
-    --danger: #dc2626;
-    --danger-bg: #fef2f2;
-    --danger-text: #991b1b;
-    --success: #16a34a;
-    --success-bg: #f0fdf4;
-    --success-text: #14532d;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 14px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-
-  /* 헤더 */
-  .header {
-    background: var(--text);
-    color: #fff;
-    padding: 20px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header h1 { font-size: 16px; font-weight: 500; letter-spacing: -0.3px; }
-  .header span { font-size: 12px; color: #888; }
-
-  /* 탭 네비 */
-  .nav {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 32px;
-    display: flex;
-    gap: 0;
-    position: sticky;
-    top: 57px;
-    z-index: 99;
-  }
-  .nav-tab {
-    padding: 14px 20px;
-    font-size: 13px;
-    color: var(--text2);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.15s;
-    white-space: nowrap;
-    background: none;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .nav-tab:hover { color: var(--text); }
-  .nav-tab.on { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
-
-  /* 컨텐츠 */
-  .content { max-width: 860px; margin: 0 auto; padding: 28px 24px; }
-  .page { display: none; }
-  .page.on { display: block; }
-
-  /* 카드 */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 22px;
-    margin-bottom: 14px;
-  }
-  .card-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .surface {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    margin-bottom: 8px;
-  }
-
-  /* 그리드 */
-  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
-
-  /* 메트릭 카드 */
-  .metric {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 14px;
-  }
-  .metric-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
-  .metric-val { font-size: 20px; font-weight: 700; color: var(--text); line-height: 1.2; }
-  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-  /* 슬라이더 */
-  .slider-wrap { margin-bottom: 12px; }
-  .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .slider-label { font-size: 13px; color: var(--text2); }
-  .slider-val { font-size: 13px; font-weight: 500; color: var(--text); }
-  input[type=range] {
-    width: 100%;
-    height: 4px;
-    accent-color: var(--text);
-    cursor: pointer;
-  }
-
-  /* 입력 */
-  .input-wrap { margin-bottom: 12px; }
-  .input-label { font-size: 12px; color: var(--text2); margin-bottom: 5px; }
-  .input-row { display: flex; align-items: center; gap: 8px; }
-  .input-field {
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    padding: 8px 12px;
-    font-size: 14px;
-    font-family: 'Noto Sans KR', sans-serif;
-    color: var(--text);
-    background: var(--surface);
-    flex: 1;
-  }
-  .input-field:focus { outline: none; border-color: var(--accent); }
-  .input-unit { font-size: 13px; color: var(--text2); white-space: nowrap; }
-
-  /* 테이블 */
-  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .tbl th { text-align: left; padding: 8px 10px; color: var(--text2); font-weight: 500; border-bottom: 1px solid var(--border); font-size: 12px; }
-  .tbl td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
-  .tbl tr:last-child td { border-bottom: none; }
-  .tbl tr.highlight { background: var(--accent-bg); }
-
-  /* 배지 */
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-  .badge-info { background: var(--accent-bg); color: var(--accent-text); }
-  .badge-warn { background: var(--warn-bg); color: var(--warn-text); }
-  .badge-danger { background: var(--danger-bg); color: var(--danger-text); }
-  .badge-success { background: var(--success-bg); color: var(--success-text); }
-
-  /* 상태 박스 */
-  .box-info { background: var(--accent-bg); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; color: var(--accent-text); margin-top: 10px; line-height: 1.7; }
-  .box-warn { background: var(--warn-bg); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; color: var(--warn-text); margin-top: 10px; line-height: 1.7; }
-  .box-danger { background: var(--danger-bg); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; color: var(--danger-text); margin-top: 10px; line-height: 1.7; }
-  .box-success { background: var(--success-bg); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; color: var(--success-text); margin-top: 10px; line-height: 1.7; }
-
-  /* 결과 강조 */
-  .result-box {
-    border-radius: var(--radius);
-    padding: 16px 18px;
-    margin-bottom: 14px;
-  }
-  .result-label { font-size: 12px; opacity: 0.8; margin-bottom: 4px; }
-  .result-val { font-size: 26px; font-weight: 700; line-height: 1.2; }
-  .result-sub { font-size: 12px; margin-top: 4px; opacity: 0.75; }
-
-  /* 단계 흐름 */
-  .steps { display: flex; align-items: stretch; gap: 0; margin-bottom: 14px; }
-  .step {
-    flex: 1; text-align: center; padding: 14px 10px;
-    border: 1px solid var(--border);
-    font-size: 12px;
-  }
-  .step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
-  .step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
-  .step-n { font-size: 20px; font-weight: 700; margin-bottom: 3px; }
-  .step-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .step-arrow { display: flex; align-items: center; padding: 0 4px; color: var(--text3); font-size: 14px; }
-
-  /* 조항 */
-  .clause { padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .clause:last-child { border-bottom: none; }
-  .clause-title { font-weight: 500; font-size: 13px; margin-bottom: 4px; }
-  .clause-body { font-size: 12px; color: var(--text2); line-height: 1.7; }
-  .clause-body strong { color: var(--text); }
-
-  /* 세로 구분선 */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
-
-  /* 진행바 */
-  .bar-wrap { background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; margin: 6px 0; }
-  .bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+:root {
+  --bg:#f7f6f3;--surface:#fff;--surface2:#f0efe9;--border:#e2e0d8;--border2:#cccac0;
+  --text:#1a1917;--text2:#6b6960;--text3:#9b9990;
+  --accent:#2563eb;--accent-bg:#eff6ff;--accent-text:#1d4ed8;
+  --warn:#d97706;--warn-bg:#fffbeb;--warn-text:#92400e;
+  --danger:#dc2626;--danger-bg:#fef2f2;--danger-text:#991b1b;
+  --success:#16a34a;--success-bg:#f0fdf4;--success-text:#14532d;
+  --radius:10px;--radius-sm:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+.header{background:var(--text);color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header h1{font-size:15px;font-weight:500}
+.header span{font-size:12px;color:#888}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;display:flex;position:sticky;top:55px;z-index:99;overflow-x:auto}
+.nav-tab{padding:13px 18px;font-size:13px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:'Noto Sans KR',sans-serif;white-space:nowrap;transition:all .15s}
+.nav-tab:hover{color:var(--text)}
+.nav-tab.on{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.content{max-width:860px;margin:0 auto;padding:24px 20px}
+.page{display:none}.page.on{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px}
+.card-title{font-size:13px;font-weight:500;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.surface{background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.metric{background:var(--surface2);border-radius:var(--radius-sm);padding:14px}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.metric-val{font-size:20px;font-weight:700;line-height:1.2}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.slider-wrap{margin-bottom:12px}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.slider-label{font-size:13px;color:var(--text2)}
+.slider-val{font-size:13px;font-weight:500}
+input[type=range]{width:100%;height:4px;accent-color:var(--text);cursor:pointer}
+input[type=number]{border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 12px;font-size:14px;font-family:'Noto Sans KR',sans-serif;color:var(--text);background:var(--surface);width:100%}
+input[type=number]:focus{outline:none;border-color:var(--accent)}
+.input-label{font-size:12px;color:var(--text2);margin-bottom:5px}
+.input-row{display:flex;align-items:center;gap:8px}
+.input-unit{font-size:13px;color:var(--text2);white-space:nowrap}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:8px 10px;color:var(--text2);font-weight:500;border-bottom:1px solid var(--border);font-size:12px}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--border)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.hl{background:var(--accent-bg)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.bi{background:var(--accent-bg);color:var(--accent-text)}
+.bw{background:var(--warn-bg);color:var(--warn-text)}
+.bd{background:var(--danger-bg);color:var(--danger-text)}
+.bs{background:var(--success-bg);color:var(--success-text)}
+.box-info{background:var(--accent-bg);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--accent-text);margin-top:10px;line-height:1.7}
+.box-warn{background:var(--warn-bg);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--warn-text);margin-top:10px;line-height:1.7}
+.box-danger{background:var(--danger-bg);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--danger-text);margin-top:10px;line-height:1.7}
+.box-success{background:var(--success-bg);border-radius:var(--radius-sm);padding:10px 14px;font-size:12px;color:var(--success-text);margin-top:10px;line-height:1.7}
+.result-box{border-radius:var(--radius);padding:16px 18px;margin-bottom:14px}
+.steps{display:flex;align-items:stretch;margin-bottom:14px}
+.step{flex:1;text-align:center;padding:14px 8px;border:1px solid var(--border);font-size:12px}
+.step:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+.step:last-child{border-radius:0 var(--radius) var(--radius) 0}
+.step-n{font-size:20px;font-weight:700;margin-bottom:3px}
+.step-lbl{font-size:11px;color:var(--text2);margin-top:2px}
+.step-arrow{display:flex;align-items:center;padding:0 4px;color:var(--text3)}
+.clause{padding:10px 0;border-bottom:1px solid var(--border)}
+.clause:last-child{border-bottom:none}
+.clause-title{font-weight:500;font-size:13px;margin-bottom:4px}
+.clause-body{font-size:12px;color:var(--text2);line-height:1.7}
+.clause-body strong{color:var(--text)}
+.bar-wrap{background:var(--surface2);border-radius:4px;height:8px;overflow:hidden;margin:6px 0}
+.bar{height:100%;border-radius:4px;transition:width .3s}
+/* ===== 수정 가능 영역 강조 ===== */
+.editable-section{border:2px dashed var(--border2);border-radius:var(--radius);padding:16px 20px;margin-bottom:14px;position:relative}
+.editable-badge{position:absolute;top:-10px;left:14px;background:var(--warn);color:#fff;font-size:11px;padding:2px 10px;border-radius:20px;font-weight:500}
 </style>
 </head>
 <body>
@@ -224,435 +88,334 @@
 </div>
 
 <div class="nav">
-  <button class="nav-tab on" onclick="goPage('profit', this)">수익구조 계산기</button>
-  <button class="nav-tab" onclick="goPage('enroll', this)">입반 조건</button>
-  <button class="nav-tab" onclick="goPage('expel', this)">퇴출 기준</button>
-  <button class="nav-tab" onclick="goPage('refund', this)">환불 약관</button>
+  <button class="nav-tab on"  onclick="goPage('profit',this)">수익구조 계산기</button>
+  <button class="nav-tab"     onclick="goPage('enroll',this)">입반 조건</button>
+  <button class="nav-tab"     onclick="goPage('expel',this)">퇴출 기준</button>
+  <button class="nav-tab"     onclick="goPage('refund',this)">환불 약관</button>
 </div>
 
 <div class="content">
 
-  <!-- ======== 1. 수익구조 계산기 ======== -->
-  <div id="profit" class="page on">
-
-    <div class="card">
-      <div class="card-title">기본 설정</div>
-      <div class="g2">
-        <div class="input-wrap">
-          <div class="input-label">일반 월 수강료</div>
-          <div class="input-row">
-            <input class="input-field" type="number" id="base-fee" value="490000" oninput="calcProfit()">
-            <span class="input-unit">원 / 월</span>
-          </div>
-        </div>
-        <div class="input-wrap">
-          <div class="input-label">합격보장반 월 수강료 <span style="color:var(--accent);font-size:11px">← 직접 입력</span></div>
-          <div class="input-row">
-            <input class="input-field" type="number" id="guarantee-fee" value="650000" oninput="calcProfit()">
-            <span class="input-unit">원 / 월</span>
-          </div>
-        </div>
+<!-- ===== 1. 수익구조 계산기 ===== -->
+<div id="profit" class="page on">
+  <div class="card">
+    <div class="card-title">기본 설정</div>
+    <div class="g2">
+      <div>
+        <div class="input-label">일반 월 수강료</div>
+        <div class="input-row"><input type="number" id="base-fee" value="490000" oninput="calcProfit()"><span class="input-unit">원 / 월</span></div>
       </div>
-      <div class="g2">
-        <div>
-          <div class="slider-wrap">
-            <div class="slider-header">
-              <span class="slider-label">모집 인원</span>
-              <span class="slider-val" id="students-out">20명</span>
-            </div>
-            <input type="range" min="1" max="93" value="20" step="1" id="students" oninput="calcProfit()">
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:3px"><span>1명</span><span>만석 93석</span></div>
-          </div>
-          <div class="slider-wrap">
-            <div class="slider-header">
-              <span class="slider-label">수강 기간</span>
-              <span class="slider-val" id="months-out">12개월</span>
-            </div>
-            <input type="range" min="8" max="12" value="12" step="1" id="months" oninput="calcProfit()">
-          </div>
-        </div>
-        <div>
-          <div class="slider-wrap">
-            <div class="slider-header">
-              <span class="slider-label">실제 1차 합격률</span>
-              <span class="slider-val" id="passrate-out">65%</span>
-            </div>
-            <input type="range" min="30" max="90" value="65" step="5" id="passrate" oninput="calcProfit()">
-          </div>
-          <div class="slider-wrap">
-            <div class="slider-header">
-              <span class="slider-label">태만 퇴출 비율</span>
-              <span class="slider-val" id="expel-out">10%</span>
-            </div>
-            <input type="range" min="0" max="30" value="10" step="5" id="expel" oninput="calcProfit()">
-            <div style="font-size:11px;color:var(--text3);margin-top:2px">퇴출자 = 환불 미발생</div>
-          </div>
-        </div>
+      <div>
+        <div class="input-label">합격보장반 월 수강료 <span style="color:var(--accent);font-size:11px">← 직접 입력</span></div>
+        <div class="input-row"><input type="number" id="gfee" value="650000" oninput="calcProfit()"><span class="input-unit">원 / 월</span></div>
       </div>
     </div>
-
-    <div id="profit-result"></div>
-
-    <div class="card">
-      <div class="card-title">프리미엄 구간별 손익 비교 <span id="compare-label" style="font-weight:400;color:var(--text2);font-size:12px"></span></div>
-      <div style="overflow-x:auto">
-        <table class="tbl" id="premium-tbl"></table>
+    <div class="g2">
+      <div>
+        <div class="slider-wrap">
+          <div class="slider-header"><span class="slider-label">모집 인원</span><span class="slider-val" id="s-students">20명</span></div>
+          <input type="range" min="1" max="93" value="20" id="students" oninput="calcProfit()">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:2px"><span>1명</span><span>만석 93석</span></div>
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-header"><span class="slider-label">수강 기간</span><span class="slider-val" id="s-months">12개월</span></div>
+          <input type="range" min="8" max="12" value="12" id="months" oninput="calcProfit()">
+        </div>
+      </div>
+      <div>
+        <div class="slider-wrap">
+          <div class="slider-header"><span class="slider-label">실제 1차 합격률</span><span class="slider-val" id="s-pass">65%</span></div>
+          <input type="range" min="30" max="90" value="65" step="5" id="passrate" oninput="calcProfit()">
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-header"><span class="slider-label">태만 퇴출 비율</span><span class="slider-val" id="s-expel">10%</span></div>
+          <input type="range" min="0" max="30" value="10" step="5" id="expelrate" oninput="calcProfit()">
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">퇴출자 = 환불 미발생</div>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- ======== 2. 입반 조건 ======== -->
-  <div id="enroll" class="page">
-    <div class="card">
-      <div class="card-title">입반 심사 방식 — 옵션 비교</div>
-      <div class="g2">
-        <div class="surface">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <span style="font-weight:500;font-size:13px">A안 · 선착순 입반</span>
-            <span class="badge badge-warn">리스크 높음</span>
-          </div>
-          <p style="font-size:12px;color:var(--text2);line-height:1.7">신청하면 바로 입반. 마케팅 진입장벽이 낮아 모집에 유리하지만 환불 리스크가 그대로 반영됨.</p>
-        </div>
-        <div class="surface" style="border: 2px solid var(--accent)">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <span style="font-weight:500;font-size:13px">B안 · 간단 면접</span>
-            <span class="badge badge-success">권장</span>
-          </div>
-          <p style="font-size:12px;color:var(--text2);line-height:1.7">10~15분 대화. 합격 의지·공부 기간 확인. 선별보다 <strong style="color:var(--text)">"각서 효과"</strong>가 목적 — 수강생 스스로 각오를 다지게 함.</p>
-        </div>
-      </div>
-      <div class="box-info">B안 추천 이유: 실제로 떨어뜨리는 게 목적이 아니에요. 면접 과정 자체가 "나는 진지하게 신청한 것"이라는 인식을 심어줘서 이탈률과 태만율이 낮아져요.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">입반 필수 조건</div>
-      <table class="tbl">
-        <tr><th>항목</th><th>내용</th></tr>
-        <tr><td>응시 자격</td><td>해당 시험 응시 자격 충족자 (나이·학력 등)</td></tr>
-        <tr><td>수강 기간 동의</td><td>최소 8개월 이상 등록 확약</td></tr>
-        <tr><td>규정 동의</td><td>퇴출 기준·환불 약관 서면 동의 필수</td></tr>
-        <tr><td>시험 응시 의무</td><td>수강 기간 내 1회 이상 실제 응시 <span class="badge badge-danger">미응시 시 환불 불가</span></td></tr>
-        <tr><td>재등록 제한</td><td>과거 환불 수령자 재가입 불가</td></tr>
-      </table>
-    </div>
+  <div id="profit-result"></div>
+  <div class="card">
+    <div class="card-title">월 수강료별 손익 비교 <span id="compare-lbl" style="font-weight:400;color:var(--text2);font-size:12px"></span></div>
+    <div style="overflow-x:auto"><table class="tbl" id="compare-tbl"></table></div>
   </div>
-
-  <!-- ======== 3. 퇴출 기준 ======== -->
-  <div id="expel" class="page">
-    <div class="card">
-      <div class="card-title">순공시간 기준</div>
-      <table class="tbl" style="margin-bottom:12px">
-        <tr><th>항목</th><th>내용</th></tr>
-        <tr><td>측정 방식</td><td>클래스업 출결 자동 집계 · 주 단위 확인</td></tr>
-        <tr><td>의무 학습일</td><td>평일 + 토요일 (일요일 자율)</td></tr>
-        <tr><td>물리적 최대</td><td>평일 11h×5 + 토 6.5h = <strong>약 62시간/주</strong></td></tr>
-        <tr><td>집계 방식</td><td>주간 총량 관리 — 하루 기준 없이 주 합산으로 판단</td></tr>
-        <tr><td style="color:var(--warn);font-weight:500">경고 기준</td><td><strong>주 50시간 미만</strong> <span class="badge badge-warn">최대 대비 81%</span></td></tr>
-        <tr><td>리셋 주기</td><td>분기(3개월) 리셋</td></tr>
-      </table>
-      <div class="box-info">주간 총량 방식이라 특정 요일 컨디션 불량 시 다른 요일로 만회 가능. 단, 만회는 해당 주 내에서만 인정.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">경고 → 면담 → 퇴출 흐름</div>
-      <div class="steps">
-        <div class="step" style="background:var(--warn-bg)">
-          <div class="step-n" style="color:var(--warn)">1회</div>
-          <div style="font-size:12px;font-weight:500;color:var(--warn)">서면 경고</div>
-          <div class="step-lbl">주 50h 미만 첫 번째</div>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step" style="background:var(--warn-bg)">
-          <div class="step-n" style="color:var(--warn)">2회</div>
-          <div style="font-size:12px;font-weight:500;color:var(--warn)">원장 면담</div>
-          <div class="step-lbl">해당 분기 두 번째</div>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step" style="background:var(--danger-bg)">
-          <div class="step-n" style="color:var(--danger)">3회</div>
-          <div style="font-size:12px;font-weight:500;color:var(--danger)">퇴출 처분</div>
-          <div class="step-lbl">환불 없음</div>
-        </div>
-      </div>
-
-      <div class="g3">
-        <div class="surface" style="text-align:center">
-          <div style="font-size:18px;font-weight:700">Q1</div>
-          <div style="font-size:11px;color:var(--text2)">1~3월</div>
-          <div style="margin-top:6px"><span class="badge badge-success">리셋 기준점</span></div>
-        </div>
-        <div class="surface" style="text-align:center">
-          <div style="font-size:18px;font-weight:700">Q2</div>
-          <div style="font-size:11px;color:var(--text2)">4~6월</div>
-          <div style="margin-top:6px"><span class="badge badge-success">리셋 기준점</span></div>
-        </div>
-        <div class="surface" style="text-align:center">
-          <div style="font-size:18px;font-weight:700">Q3</div>
-          <div style="font-size:11px;color:var(--text2)">7~9월</div>
-          <div style="margin-top:6px"><span class="badge badge-success">리셋 기준점</span></div>
-        </div>
-      </div>
-      <div class="box-warn">분기 리셋이라 Q1 경고 2회도 Q2 시작 시 0회 초기화. 단, 면담 기록은 누적 보관 — 퇴출 분쟁 시 근거 자료로 활용.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">정당 사유 인정 기준</div>
-      <table class="tbl" style="margin-bottom:12px">
-        <tr><th>사유</th><th>인정 범위</th><th>증빙</th><th>처리</th></tr>
-        <tr><td>경조사</td><td>당일 + 전후 1일</td><td>청첩장·부고</td><td><span class="badge badge-success">자동 인정</span></td></tr>
-        <tr><td>병원·통원</td><td>월 2회 한도 · 당일만</td><td>진료확인서·영수증</td><td><span class="badge badge-info">한도 내 인정</span></td></tr>
-        <tr><td>입원</td><td>기간 전체</td><td>입원확인서</td><td><span class="badge badge-success">자동 인정</span></td></tr>
-        <tr><td>경찰·소방 학원</td><td>수강 시간 합산</td><td>시간표 사전 제출</td><td><span class="badge badge-info">월별 일괄 처리</span></td></tr>
-        <tr><td>기타</td><td>원장 사전 승인</td><td>사전 신청</td><td><span class="badge badge-warn">승인 필요</span></td></tr>
-      </table>
-
-      <div class="card-title" style="margin-top:4px">원장 승인 기준 (문서화)</div>
-      <div class="g2">
-        <div>
-          <div style="font-size:12px;font-weight:500;color:var(--success);margin-bottom:6px">인정</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.9">
-            · 국가시험·자격증 응시<br>
-            · 공공기관 소환 (법원·병무청 등)<br>
-            · 천재지변·교통 마비
-          </div>
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:500;color:var(--danger);margin-bottom:6px">불인정</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.9">
-            · 개인 여행·약속<br>
-            · 피로·컨디션 난조<br>
-            · 사전 승인 없는 사후 요청
-          </div>
-        </div>
-      </div>
-      <div class="box-warn">사후 제출 기한: 사유 발생 후 3일 이내. 기한 초과 시 인정 불가. 경찰·소방 학원 시간표는 매달 1일에 사전 제출.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">수강생 케이스 시뮬레이터</div>
-      <p style="font-size:12px;color:var(--text2);margin-bottom:14px">주별 순공시간 조정 → 경고 횟수 자동 계산</p>
-      <div class="slider-wrap"><div class="slider-header"><span class="slider-label">1주차 순공</span><span class="slider-val" id="sw1-out">58h</span></div><input type="range" min="0" max="70" value="58" step="1" id="sw1" oninput="runSim()"></div>
-      <div class="slider-wrap"><div class="slider-header"><span class="slider-label">2주차 순공</span><span class="slider-val" id="sw2-out">45h</span></div><input type="range" min="0" max="70" value="45" step="1" id="sw2" oninput="runSim()"></div>
-      <div class="slider-wrap"><div class="slider-header"><span class="slider-label">3주차 순공</span><span class="slider-val" id="sw3-out">62h</span></div><input type="range" min="0" max="70" value="62" step="1" id="sw3" oninput="runSim()"></div>
-      <div class="slider-wrap"><div class="slider-header"><span class="slider-label">4주차 순공</span><span class="slider-val" id="sw4-out">43h</span></div><input type="range" min="0" max="70" value="43" step="1" id="sw4" oninput="runSim()"></div>
-      <div class="slider-wrap"><div class="slider-header"><span class="slider-label">5주차 순공</span><span class="slider-val" id="sw5-out">55h</span></div><input type="range" min="0" max="70" value="55" step="1" id="sw5" oninput="runSim()"></div>
-      <div class="slider-wrap"><div class="slider-header"><span class="slider-label">6주차 순공</span><span class="slider-val" id="sw6-out">48h</span></div><input type="range" min="0" max="70" value="48" step="1" id="sw6" oninput="runSim()"></div>
-      <div id="sim-result"></div>
-    </div>
-  </div>
-
-  <!-- ======== 4. 환불 약관 ======== -->
-  <div id="refund" class="page">
-    <div class="card">
-      <div class="card-title">환불 약관 조항</div>
-      <div class="clause">
-        <div class="clause-title">제1조 · 환불 대상</div>
-        <div class="clause-body">합격보장반 수강생 중 <strong>수강 기간 내 1차 시험에 응시하였으나 불합격한 자</strong>에 한해 전액 환불한다. 단, 아래 제3조 해당자는 제외한다.</div>
-      </div>
-      <div class="clause">
-        <div class="clause-title">제2조 · 환불 금액</div>
-        <div class="clause-body">환불 금액은 <strong>실납부 수강료 전액</strong>으로 한다. 무료 제공 기간에 해당하는 금액은 환불 대상에 포함하지 않는다.</div>
-      </div>
-      <div class="clause">
-        <div class="clause-title">제3조 · 환불 제외 사유 <span class="badge badge-danger">핵심 조항</span></div>
-        <div class="clause-body">
-          다음 각 호에 해당하는 경우 환불하지 않는다.<br>
-          ① <strong>시험 미응시</strong> — 수강 기간 내 1회도 응시하지 않은 경우<br>
-          ② <strong>중도 해지</strong> — 수강생 본인이 중도에 등록을 해지한 경우<br>
-          ③ <strong>퇴출 처분</strong> — 태만 기준 점수 미달로 퇴출된 경우<br>
-          ④ <strong>규정 위반</strong> — 허위 서류 제출 또는 중대 규정 위반으로 퇴출된 경우<br>
-          ⑤ <strong>응시 자격 미충족</strong> — 수강 중 응시 자격을 상실한 경우
-        </div>
-      </div>
-      <div class="clause">
-        <div class="clause-title">제4조 · 환불 신청 방법</div>
-        <div class="clause-body"><strong>불합격 확인일로부터 14일 이내</strong>에 불합격 확인서(공식 발표 캡처 등) 및 신분증 사본을 제출하여 환불 신청한다. 기한 초과 시 환불 청구권을 상실한다.</div>
-      </div>
-      <div class="clause">
-        <div class="clause-title">제5조 · 환불 지급 기한</div>
-        <div class="clause-body">서류 확인 완료 후 <strong>30일 이내</strong> 지급 완료를 원칙으로 한다.</div>
-      </div>
-      <div class="clause">
-        <div class="clause-title">제6조 · 분쟁 해결</div>
-        <div class="clause-body">본 약관에 명시되지 않은 사항은 관계 법령 및 <strong>소비자분쟁해결기준</strong>에 따른다.</div>
-      </div>
-      <div class="box-danger" style="margin-top:12px">제3조 ①번 "시험 미응시 시 환불 불가"가 가장 중요한 방어 조항. 수강만 하고 시험을 안 보는 케이스를 막아줍니다.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">환불 처리 흐름</div>
-      <table class="tbl">
-        <tr><th>단계</th><th>내용</th><th>기한</th></tr>
-        <tr><td>1단계</td><td>불합격 발표 확인 → 수강생 환불 신청</td><td>불합격 확인 후 14일 이내</td></tr>
-        <tr><td>2단계</td><td>불합격 확인서·신분증 서류 검토</td><td>3~5 영업일</td></tr>
-        <tr><td>3단계</td><td>퇴출·중도해지 여부 내부 확인</td><td>—</td></tr>
-        <tr><td>4단계</td><td>환불 승인 → 계좌 지급</td><td>서류 확인 후 30일 이내</td></tr>
-      </table>
-    </div>
-  </div>
-
 </div>
 
+<!-- ===== 2. 입반 조건 ===== -->
+<div id="enroll" class="page">
+  <div class="editable-section">
+    <div class="editable-badge">✏️ 수정 가능 영역</div>
+    <div class="card-title" style="border:none;padding:0;margin-bottom:14px">입반 심사 방식</div>
+    <div class="g2">
+      <div class="surface">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-weight:500">A안 · 선착순 입반</span>
+          <span class="badge bw">리스크 높음</span>
+        </div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.7">신청하면 바로 입반. 모집 유리하지만 환불 리스크가 그대로 반영됨.</p>
+      </div>
+      <div class="surface" style="border:2px solid var(--accent)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-weight:500">B안 · 간단 면접</span>
+          <span class="badge bs">권장</span>
+        </div>
+        <p style="font-size:12px;color:var(--text2);line-height:1.7">10~15분 대화. 합격 의지 확인. 선별보다 <strong style="color:var(--text)">"각서 효과"</strong>가 목적.</p>
+      </div>
+    </div>
+    <div class="box-info">면접 과정 자체가 "나는 진지하게 신청한 것"이라는 인식을 심어줘서 이탈률과 태만율이 낮아져요.</div>
+  </div>
+
+  <div class="editable-section">
+    <div class="editable-badge">✏️ 수정 가능 영역</div>
+    <div class="card-title" style="border:none;padding:0;margin-bottom:12px">입반 필수 조건</div>
+    <table class="tbl">
+      <tr><th>항목</th><th>내용</th></tr>
+      <tr><td>응시 자격</td><td>해당 시험 응시 자격 충족자 (나이·학력 등)</td></tr>
+      <tr><td>수강 기간 동의</td><td>최소 8개월 이상 등록 확약</td></tr>
+      <tr><td>규정 동의</td><td>퇴출 기준·환불 약관 서면 동의 필수</td></tr>
+      <tr><td>시험 응시 의무</td><td>수강 기간 내 1회 이상 실제 응시 <span class="badge bd">미응시 시 환불 불가</span></td></tr>
+      <tr><td>재등록 제한</td><td>과거 환불 수령자 재가입 불가</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 3. 퇴출 기준 ===== -->
+<div id="expel" class="page">
+  <div class="editable-section">
+    <div class="editable-badge">✏️ 수정 가능 영역</div>
+    <div class="card-title" style="border:none;padding:0;margin-bottom:12px">순공시간 기준</div>
+    <table class="tbl" style="margin-bottom:12px">
+      <tr><th>항목</th><th>내용</th></tr>
+      <tr><td>측정 방식</td><td>클래스업 출결 자동 집계 · 주 단위 확인</td></tr>
+      <tr><td>의무 학습일</td><td>평일 + 토요일 (일요일 자율)</td></tr>
+      <tr><td>물리적 최대</td><td>평일 11h×5 + 토 6.5h = 약 62시간/주</td></tr>
+      <tr><td>집계 방식</td><td>주간 총량 관리 — 하루 기준 없이 주 합산으로 판단</td></tr>
+      <tr><td style="color:var(--warn);font-weight:500">경고 기준</td><td><strong>주 50시간 미만</strong> <span class="badge bw">최대 대비 81%</span></td></tr>
+      <tr><td>리셋 주기</td><td>분기(3개월) 리셋</td></tr>
+    </table>
+    <div class="box-info">주간 총량 방식이라 특정 요일 컨디션 불량 시 다른 요일로 만회 가능. 단, 만회는 해당 주 내에서만 인정.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">경고 → 면담 → 퇴출 흐름</div>
+    <div class="steps">
+      <div class="step" style="background:var(--warn-bg)">
+        <div class="step-n" style="color:var(--warn)">1회</div>
+        <div style="font-size:12px;font-weight:500;color:var(--warn)">서면 경고</div>
+        <div class="step-lbl">주 50h 미만 첫 번째</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step" style="background:var(--warn-bg)">
+        <div class="step-n" style="color:var(--warn)">2회</div>
+        <div style="font-size:12px;font-weight:500;color:var(--warn)">원장 면담</div>
+        <div class="step-lbl">해당 분기 두 번째</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step" style="background:var(--danger-bg)">
+        <div class="step-n" style="color:var(--danger)">3회</div>
+        <div style="font-size:12px;font-weight:500;color:var(--danger)">퇴출 처분</div>
+        <div class="step-lbl">환불 없음</div>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="surface" style="text-align:center"><div style="font-size:18px;font-weight:700">Q1</div><div style="font-size:11px;color:var(--text2)">1~3월</div><div style="margin-top:6px"><span class="badge bs">리셋 기준점</span></div></div>
+      <div class="surface" style="text-align:center"><div style="font-size:18px;font-weight:700">Q2</div><div style="font-size:11px;color:var(--text2)">4~6월</div><div style="margin-top:6px"><span class="badge bs">리셋 기준점</span></div></div>
+      <div class="surface" style="text-align:center"><div style="font-size:18px;font-weight:700">Q3</div><div style="font-size:11px;color:var(--text2)">7~9월</div><div style="margin-top:6px"><span class="badge bs">리셋 기준점</span></div></div>
+    </div>
+    <div class="box-warn">분기 리셋이라 Q1 경고 2회도 Q2 시작 시 0회 초기화. 단, 면담 기록은 누적 보관.</div>
+  </div>
+
+  <div class="editable-section">
+    <div class="editable-badge">✏️ 수정 가능 영역</div>
+    <div class="card-title" style="border:none;padding:0;margin-bottom:12px">정당 사유 인정 기준</div>
+    <table class="tbl" style="margin-bottom:12px">
+      <tr><th>사유</th><th>인정 범위</th><th>증빙</th><th>처리</th></tr>
+      <tr><td>경조사</td><td>당일 + 전후 1일</td><td>청첩장·부고</td><td><span class="badge bs">자동 인정</span></td></tr>
+      <tr><td>병원·통원</td><td>월 2회 한도 · 당일만</td><td>진료확인서·영수증</td><td><span class="badge bi">한도 내 인정</span></td></tr>
+      <tr><td>입원</td><td>기간 전체</td><td>입원확인서</td><td><span class="badge bs">자동 인정</span></td></tr>
+      <tr><td>경찰·소방 학원</td><td>수강 시간 합산</td><td>시간표 사전 제출</td><td><span class="badge bi">월별 일괄 처리</span></td></tr>
+      <tr><td>기타</td><td>원장 사전 승인</td><td>사전 신청</td><td><span class="badge bw">승인 필요</span></td></tr>
+    </table>
+    <div class="g2">
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--success);margin-bottom:6px">인정</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">· 국가시험·자격증 응시<br>· 공공기관 소환 (법원·병무청 등)<br>· 천재지변·교통 마비</div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--danger);margin-bottom:6px">불인정</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">· 개인 여행·약속<br>· 피로·컨디션 난조<br>· 사전 승인 없는 사후 요청</div>
+      </div>
+    </div>
+    <div class="box-warn">사후 제출 기한: 사유 발생 후 3일 이내 초과 시 불인정. 경찰·소방 학원 시간표는 매달 1일 사전 제출.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">수강생 케이스 시뮬레이터</div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:14px">주별 순공시간 조정 → 경고 횟수 자동 계산</p>
+    <div class="slider-wrap"><div class="slider-header"><span class="slider-label">1주차</span><span class="slider-val" id="v1">58h</span></div><input type="range" min="0" max="70" value="58" id="r1" oninput="runSim()"></div>
+    <div class="slider-wrap"><div class="slider-header"><span class="slider-label">2주차</span><span class="slider-val" id="v2">45h</span></div><input type="range" min="0" max="70" value="45" id="r2" oninput="runSim()"></div>
+    <div class="slider-wrap"><div class="slider-header"><span class="slider-label">3주차</span><span class="slider-val" id="v3">62h</span></div><input type="range" min="0" max="70" value="62" id="r3" oninput="runSim()"></div>
+    <div class="slider-wrap"><div class="slider-header"><span class="slider-label">4주차</span><span class="slider-val" id="v4">43h</span></div><input type="range" min="0" max="70" value="43" id="r4" oninput="runSim()"></div>
+    <div class="slider-wrap"><div class="slider-header"><span class="slider-label">5주차</span><span class="slider-val" id="v5">55h</span></div><input type="range" min="0" max="70" value="55" id="r5" oninput="runSim()"></div>
+    <div class="slider-wrap"><div class="slider-header"><span class="slider-label">6주차</span><span class="slider-val" id="v6">48h</span></div><input type="range" min="0" max="70" value="48" id="r6" oninput="runSim()"></div>
+    <div id="sim-result" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<!-- ===== 4. 환불 약관 ===== -->
+<div id="refund" class="page">
+  <div class="editable-section">
+    <div class="editable-badge">✏️ 수정 가능 영역</div>
+    <div class="card-title" style="border:none;padding:0;margin-bottom:12px">환불 약관 조항</div>
+    <div class="clause"><div class="clause-title">제1조 · 환불 대상</div><div class="clause-body">합격보장반 수강생 중 <strong>수강 기간 내 1차 시험에 응시하였으나 불합격한 자</strong>에 한해 전액 환불한다. 단, 아래 제3조 해당자는 제외한다.</div></div>
+    <div class="clause"><div class="clause-title">제2조 · 환불 금액</div><div class="clause-body">환불 금액은 <strong>실납부 수강료 전액</strong>으로 한다. 무료 제공 기간에 해당하는 금액은 환불 대상에 포함하지 않는다.</div></div>
+    <div class="clause">
+      <div class="clause-title">제3조 · 환불 제외 사유 <span class="badge bd">핵심 조항</span></div>
+      <div class="clause-body">
+        다음 각 호에 해당하는 경우 환불하지 않는다.<br>
+        ① <strong>시험 미응시</strong> — 수강 기간 내 1회도 응시하지 않은 경우<br>
+        ② <strong>중도 해지</strong> — 수강생 본인이 중도에 등록을 해지한 경우<br>
+        ③ <strong>퇴출 처분</strong> — 태만 기준 점수 미달로 퇴출된 경우<br>
+        ④ <strong>규정 위반</strong> — 허위 서류 제출 또는 중대 규정 위반으로 퇴출된 경우<br>
+        ⑤ <strong>응시 자격 미충족</strong> — 수강 중 응시 자격을 상실한 경우
+      </div>
+    </div>
+    <div class="clause"><div class="clause-title">제4조 · 환불 신청 방법</div><div class="clause-body"><strong>불합격 확인일로부터 14일 이내</strong>에 불합격 확인서 및 신분증 사본을 제출하여 환불 신청한다. 기한 초과 시 환불 청구권을 상실한다.</div></div>
+    <div class="clause"><div class="clause-title">제5조 · 환불 지급 기한</div><div class="clause-body">서류 확인 완료 후 <strong>30일 이내</strong> 지급 완료를 원칙으로 한다.</div></div>
+    <div class="clause"><div class="clause-title">제6조 · 분쟁 해결</div><div class="clause-body">본 약관에 명시되지 않은 사항은 관계 법령 및 <strong>소비자분쟁해결기준</strong>에 따른다.</div></div>
+    <div class="box-danger" style="margin-top:12px">제3조 ①번 "시험 미응시 시 환불 불가"가 가장 중요한 방어 조항.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">환불 처리 흐름</div>
+    <table class="tbl">
+      <tr><th>단계</th><th>내용</th><th>기한</th></tr>
+      <tr><td>1단계</td><td>불합격 확인 → 수강생 환불 신청</td><td>불합격 확인 후 14일 이내</td></tr>
+      <tr><td>2단계</td><td>불합격 확인서·신분증 서류 검토</td><td>3~5 영업일</td></tr>
+      <tr><td>3단계</td><td>퇴출·중도해지 여부 내부 확인</td><td>—</td></tr>
+      <tr><td>4단계</td><td>환불 승인 → 계좌 지급</td><td>서류 확인 후 30일 이내</td></tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- .content -->
+
 <script>
-/* ── 페이지 전환 ── */
-function goPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('on'));
+function goPage(id, btn) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('on'); });
   document.getElementById(id).classList.add('on');
-  event.target.classList.add('on');
+  if (btn) btn.classList.add('on');
+  if (id === 'expel') { setTimeout(runSim, 50); }
 }
 
-/* ── 수익구조 계산기 ── */
-function fmtW(n) { return Math.round(n).toLocaleString('ko-KR') + '원'; }
-function fmtM(n) { return Math.round(n / 10000).toLocaleString('ko-KR') + '만원'; }
+/* ── 수익 계산기 ── */
+function fmtW(n){ return Math.round(n).toLocaleString('ko-KR')+'원'; }
+function fmtM(n){ return Math.round(n/10000).toLocaleString('ko-KR')+'만원'; }
 
-function calcProfit() {
-  const baseFee = parseInt(document.getElementById('base-fee').value) || 490000;
-  const gFeeMonthly = parseInt(document.getElementById('guarantee-fee').value) || 650000;
-  const students = parseInt(document.getElementById('students').value);
-  const months = parseInt(document.getElementById('months').value);
-  const passRate = parseInt(document.getElementById('passrate').value) / 100;
-  const expelPct = parseInt(document.getElementById('expel').value) / 100;
+function calcProfit(){
+  var base = parseInt(document.getElementById('base-fee').value)||490000;
+  var gfee = parseInt(document.getElementById('gfee').value)||650000;
+  var stu  = parseInt(document.getElementById('students').value);
+  var mon  = parseInt(document.getElementById('months').value);
+  var pass = parseInt(document.getElementById('passrate').value)/100;
+  var exp  = parseInt(document.getElementById('expelrate').value)/100;
 
-  document.getElementById('students-out').textContent = students + '명';
-  document.getElementById('months-out').textContent = months + '개월';
-  document.getElementById('passrate-out').textContent = Math.round(passRate * 100) + '%';
-  document.getElementById('expel-out').textContent = Math.round(expelPct * 100) + '%';
+  document.getElementById('s-students').textContent = stu+'명';
+  document.getElementById('s-months').textContent   = mon+'개월';
+  document.getElementById('s-pass').textContent     = Math.round(pass*100)+'%';
+  document.getElementById('s-expel').textContent    = Math.round(exp*100)+'%';
 
-  const regularFee = baseFee * months;
-  const guaranteeFee = gFeeMonthly * months;
-  const premiumPct = Math.round((guaranteeFee / regularFee - 1) * 100);
+  var regFee = base * mon;
+  var gFee   = gfee * mon;
+  var prem   = Math.round((gFee/regFee-1)*100);
+  var expN   = Math.floor(stu*exp);
+  var rem    = stu - expN;
+  var failN  = Math.round(rem*(1-pass));
+  var passN  = rem - failN;
+  var totalRev = gFee * stu;
+  var totalRef = gFee * failN;
+  var netRev   = totalRev - totalRef;
+  var regRev   = regFee * stu;
+  var vs       = netRev - regRev;
+  var refRatio = Math.round(totalRef/totalRev*100);
+  var effFail  = Math.round(failN/stu*100);
+  var bep      = Math.round(((1-pass)*(1-exp))/(1-(1-pass)*(1-exp))*100);
+  var safe     = vs >= 0;
+  var comf     = vs >= regRev*0.1;
+  var sc       = safe?(comf?'var(--success-bg)':'var(--accent-bg)'):'var(--warn-bg)';
+  var stc      = safe?(comf?'var(--success-text)':'var(--accent-text)'):'var(--warn-text)';
+  var slbl     = safe?(comf?'안전 구간':'겨우 흑자'):'손실 위험';
 
-  const expelStudents = Math.floor(students * expelPct);
-  const remaining = students - expelStudents;
-  const failStudents = Math.round(remaining * (1 - passRate));
-  const passStudents = remaining - failStudents;
+  document.getElementById('profit-result').innerHTML =
+    '<div class="result-box" style="background:'+sc+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+        '<div>'+
+          '<div style="font-size:12px;color:'+stc+';margin-bottom:4px">환불 후 순수익 · '+slbl+'</div>'+
+          '<div style="font-size:26px;font-weight:700;color:'+stc+'">'+fmtM(netRev)+'</div>'+
+          '<div style="font-size:12px;color:'+stc+';margin-top:4px">일반반 대비 '+(safe?'+':'')+fmtM(vs)+' · '+stu+'명 중 합격 '+passN+'명 / 환불 '+failN+'명 / 퇴출 '+expN+'명</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="g4">'+
+      '<div class="metric"><div class="metric-label">일반 수강료</div><div class="metric-val" style="font-size:16px">'+fmtM(regFee)+'</div><div class="metric-sub">'+mon+'개월/1인</div></div>'+
+      '<div class="metric"><div class="metric-label">보장반 수강료</div><div class="metric-val" style="font-size:16px">'+fmtM(gFee)+'</div><div class="metric-sub">+'+prem+'% 프리미엄</div></div>'+
+      '<div class="metric"><div class="metric-label">실질 환불 인원</div><div class="metric-val">'+failN+'명</div><div class="metric-sub">전체의 '+effFail+'%</div></div>'+
+      '<div class="metric"><div class="metric-label">환불 총액</div><div class="metric-val" style="font-size:16px;color:var(--danger)">'+fmtM(totalRef)+'</div><div class="metric-sub">수입의 '+refRatio+'%</div></div>'+
+    '</div>'+
+    '<div class="card" style="margin-bottom:14px">'+
+      '<div class="card-title">손익분기 분석</div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px">'+
+        '<span>최소 손익분기 프리미엄: <strong style="color:var(--text)">+'+bep+'%</strong></span>'+
+        '<span>현재: <strong style="color:var(--text)">+'+prem+'%</strong> (차이 <strong style="color:'+(safe?'var(--success)':'var(--danger)')+'">'+((safe?'+':'')+( prem-bep))+'%p</strong>)</span>'+
+      '</div>'+
+      '<div class="bar-wrap"><div class="bar" style="width:'+Math.min(100,Math.max(0,Math.round(prem/150*100)))+'%;background:'+(safe?'#16a34a':'#dc2626')+'"></div></div>'+
+    '</div>'+
+    (refRatio>40?'<div class="box-warn">주의: 환불 비율이 수입의 '+refRatio+'%입니다. 환불 적립금 분리 관리 필수.</div>':'');
 
-  const totalRevenue = guaranteeFee * students;
-  const totalRefund = guaranteeFee * failStudents;
-  const netRevenue = totalRevenue - totalRefund;
-  const regularRevenue = regularFee * students;
-  const netVsRegular = netRevenue - regularRevenue;
-  const refundRatio = Math.round((totalRefund / totalRevenue) * 100);
-  const effectiveFailRate = Math.round((failStudents / students) * 100);
-
-  const bepPremium = Math.round(((1 - passRate) * (1 - expelPct)) / (1 - (1 - passRate) * (1 - expelPct)) * 100);
-  const safe = netVsRegular >= 0;
-  const comfortable = netVsRegular >= regularRevenue * 0.1;
-
-  const statusColor = safe ? (comfortable ? 'var(--success-bg)' : 'var(--accent-bg)') : 'var(--warn-bg)';
-  const statusTextColor = safe ? (comfortable ? 'var(--success-text)' : 'var(--accent-text)') : 'var(--warn-text)';
-  const statusLabel = safe ? (comfortable ? '안전 구간' : '겨우 흑자') : '손실 위험';
-
-  document.getElementById('profit-result').innerHTML = `
-    <div class="result-box" style="background:${statusColor};margin-bottom:14px">
-      <div class="result-label" style="color:${statusTextColor}">환불 후 순수익 · ${statusLabel}</div>
-      <div class="result-val" style="color:${statusTextColor}">${fmtM(netRevenue)}</div>
-      <div class="result-sub" style="color:${statusTextColor}">일반반 대비 ${safe ? '+' : ''}${fmtM(netVsRegular)} · ${students}명 중 합격 ${passStudents}명 / 불합격 환불 ${failStudents}명 / 퇴출 ${expelStudents}명</div>
-    </div>
-    <div class="g4">
-      <div class="metric">
-        <div class="metric-label">일반 수강료</div>
-        <div class="metric-val" style="font-size:16px">${fmtM(regularFee)}</div>
-        <div class="metric-sub">${months}개월 / 1인</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">보장반 수강료</div>
-        <div class="metric-val" style="font-size:16px">${fmtM(guaranteeFee)}</div>
-        <div class="metric-sub">+${premiumPct}% 프리미엄</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">실질 환불 인원</div>
-        <div class="metric-val">${failStudents}명</div>
-        <div class="metric-sub">전체의 ${effectiveFailRate}%</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">환불 총액</div>
-        <div class="metric-val" style="font-size:16px;color:var(--danger)">${fmtM(totalRefund)}</div>
-        <div class="metric-sub">수입의 ${refundRatio}%</div>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">손익분기 분석</div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px">
-        <span>최소 손익분기 프리미엄: <strong style="color:var(--text)">+${bepPremium}%</strong></span>
-        <span>현재 프리미엄: <strong style="color:var(--text)">+${premiumPct}%</strong> (손익분기 대비 <strong style="color:${safe?'var(--success)':'var(--danger)'}">${safe?'+':''}${premiumPct - bepPremium}%p</strong>)</span>
-      </div>
-      <div class="bar-wrap">
-        <div class="bar" style="width:${Math.min(100,Math.max(0,Math.round(premiumPct/150*100)))}%;background:${safe?'#16a34a':'#dc2626'}"></div>
-      </div>
-    </div>
-    ${refundRatio > 40 ? `<div class="box-warn">주의: 환불 비율이 수입의 ${refundRatio}%입니다. 환불 적립금 분리 관리가 필수예요.</div>` : ''}
-  `;
-
-  const monthlyOptions = [550000, 600000, 650000, 700000, 750000, 800000, 900000];
-  document.getElementById('compare-label').textContent = `· 합격률 ${Math.round(passRate*100)}% · 퇴출 ${Math.round(expelPct*100)}% 기준`;
-  const rows = monthlyOptions.map(mo => {
-    const fee = mo * months;
-    const pct = Math.round((fee / regularFee - 1) * 100);
-    const rev = fee * students;
-    const ref = fee * failStudents;
-    const net = rev - ref;
-    const vs = net - regularRevenue;
-    const ok = vs >= 0;
-    const cur = mo === gFeeMonthly;
-    return `<tr${cur ? ' class="highlight"' : ''}>
-      <td>${cur ? '▶ ' : ''}월 ${fmtW(mo)}</td>
-      <td>${fmtM(fee)}</td>
-      <td>+${pct}%</td>
-      <td style="color:var(--danger)">-${fmtM(ref)}</td>
-      <td style="font-weight:${cur?'700':'400'}">${fmtM(net)}</td>
-      <td style="color:${ok?'var(--success)':'var(--danger)'}">${ok?'+':''}${fmtM(vs)}</td>
-    </tr>`;
+  var opts=[550000,600000,650000,700000,750000,800000,900000];
+  document.getElementById('compare-lbl').textContent='· 합격률 '+Math.round(pass*100)+'% · 퇴출 '+Math.round(exp*100)+'% 기준';
+  var rows=opts.map(function(mo){
+    var fee=mo*mon, p=Math.round((fee/regFee-1)*100);
+    var rev=fee*stu, ref=fee*failN, net=rev-ref, v=net-regRev, ok=v>=0, cur=mo===gfee;
+    return '<tr'+(cur?' class="hl"':'')+'>'+
+      '<td>'+(cur?'▶ ':'')+fmtW(mo)+'/월</td>'+
+      '<td>'+fmtM(fee)+'</td><td>+'+p+'%</td>'+
+      '<td style="color:var(--danger)">-'+fmtM(ref)+'</td>'+
+      '<td style="font-weight:'+(cur?700:400)+'">'+fmtM(net)+'</td>'+
+      '<td style="color:'+(ok?'var(--success)':'var(--danger)')+'">'+(ok?'+':'')+fmtM(v)+'</td></tr>';
   }).join('');
-  document.getElementById('premium-tbl').innerHTML = `
-    <thead><tr><th>월 수강료</th><th>총 수강료</th><th>프리미엄</th><th>환불 총액</th><th>순수익</th><th>일반 대비</th></tr></thead>
-    <tbody>${rows}</tbody>
-  `;
+  document.getElementById('compare-tbl').innerHTML=
+    '<thead><tr><th>월 수강료</th><th>총 수강료</th><th>프리미엄</th><th>환불 총액</th><th>순수익</th><th>일반 대비</th></tr></thead><tbody>'+rows+'</tbody>';
 }
 
 /* ── 시뮬레이터 ── */
-function buildSim() {
-  let html = '';
-  for (let i = 1; i <= 6; i++) {
-    html += `<div class="slider-wrap">
-      <div class="slider-header">
-function runSim() {
-  const threshold = 50;
-  let warnings = 0;
-  let rows = '';
-  for (let i = 1; i <= 6; i++) {
-    const h = parseInt(document.getElementById('sw' + i).value);
-    document.getElementById('sw' + i + '-out').textContent = h + 'h';
-    const fail = h < threshold;
-    if (fail) warnings++;
-    const action = warnings === 1 && fail ? '서면 경고 발송' : warnings === 2 && fail ? '원장 면담 실시' : warnings >= 3 && fail ? '퇴출 처분' : '—';
-    rows += `<tr>
-      <td>${i}주차</td>
-      <td style="font-weight:500;color:${fail?'var(--danger)':'var(--success)'}">${h}h</td>
-      <td>${fail ? `<span class="badge badge-danger">경고 ${warnings}회</span>` : `<span class="badge badge-success">정상</span>`}</td>
-      <td style="font-size:12px;color:var(--text2)">${action}</td>
-    </tr>`;
+function runSim(){
+  var thr=50, warn=0, rows='';
+  for(var i=1;i<=6;i++){
+    var el=document.getElementById('r'+i);
+    if(!el) return;
+    var h=parseInt(el.value);
+    document.getElementById('v'+i).textContent=h+'h';
+    var fail=h<thr;
+    if(fail) warn++;
+    var act=warn===1&&fail?'서면 경고 발송':warn===2&&fail?'원장 면담 실시':warn>=3&&fail?'퇴출 처분':'—';
+    rows+='<tr>'+
+      '<td>'+i+'주차</td>'+
+      '<td style="font-weight:500;color:'+(fail?'var(--danger)':'var(--success)')+'">'+h+'h</td>'+
+      '<td>'+(fail?'<span class="badge bd">경고 '+warn+'회</span>':'<span class="badge bs">정상</span>')+'</td>'+
+      '<td style="font-size:12px;color:var(--text2)">'+act+'</td></tr>';
   }
-  const fc = warnings >= 3 ? 'danger' : warnings >= 2 ? 'warn' : 'success';
-  const ft = warnings >= 3 ? `퇴출 처분 — 이 분기 ${warnings}회 경고 누적` : warnings === 2 ? '원장 면담 대상 — 추가 1회 시 퇴출' : warnings === 1 ? '서면 경고 1회 — 이번 분기 2회 여유' : '정상 — 경고 없음';
-  document.getElementById('sim-result').innerHTML = `
-    <table class="tbl" style="margin-bottom:10px"><thead><tr><th>주차</th><th>순공시간</th><th>상태</th><th>조치</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="box-${fc}" style="font-weight:500">${ft}</div>
-  `;
-}
-
-/* ── 페이지 전환 ── */
-function goPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  if (btn) btn.classList.add('on');
+  var fc=warn>=3?'danger':warn>=2?'warn':'success';
+  var ft=warn>=3?'퇴출 처분 — 이 분기 '+warn+'회 경고 누적':warn===2?'원장 면담 대상 — 추가 1회 시 퇴출':warn===1?'서면 경고 1회 — 이번 분기 2회 여유':'정상 — 경고 없음';
+  document.getElementById('sim-result').innerHTML=
+    '<table class="tbl" style="margin-bottom:10px"><thead><tr><th>주차</th><th>순공</th><th>상태</th><th>조치</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="box-'+fc+'" style="font-weight:500">'+ft+'</div>';
 }
 
 /* ── 초기화 ── */
 calcProfit();
-runSim();
 </script>
 </body>
 </html>
