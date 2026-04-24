@@ -98,48 +98,55 @@ input[type=number]:focus{outline:none;border-color:var(--accent)}
 
 <!-- ===== 1. 수익구조 계산기 ===== -->
 <div id="profit" class="page on">
+
   <div class="card">
     <div class="card-title">기본 설정</div>
     <div class="g2">
       <div>
-        <div class="input-label">일반 월 수강료</div>
-        <div class="input-row"><input type="number" id="base-fee" value="490000" oninput="calcProfit()"><span class="input-unit">원 / 월</span></div>
+        <div class="input-label">기준 수강료 (30일 기준)</div>
+        <div class="input-row"><input type="number" id="base-day" value="490000" oninput="calcProfit()"><span class="input-unit">원 / 30일</span></div>
       </div>
       <div>
-        <div class="input-label">합격보장반 월 수강료 <span style="color:var(--accent);font-size:11px">← 직접 입력</span></div>
-        <div class="input-row"><input type="number" id="gfee" value="650000" oninput="calcProfit()"><span class="input-unit">원 / 월</span></div>
+        <div class="input-label">모집 인원</div>
+        <div class="slider-wrap" style="margin-bottom:0">
+          <div class="slider-header"><span class="slider-label"></span><span class="slider-val" id="s-students">20명</span></div>
+          <input type="range" min="1" max="93" value="20" id="students" oninput="calcProfit()">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:2px"><span>1명</span><span>만석 93석</span></div>
+        </div>
       </div>
     </div>
     <div class="g2">
       <div>
         <div class="slider-wrap">
-          <div class="slider-header"><span class="slider-label">모집 인원</span><span class="slider-val" id="s-students">20명</span></div>
-          <input type="range" min="1" max="93" value="20" id="students" oninput="calcProfit()">
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:2px"><span>1명</span><span>만석 93석</span></div>
-        </div>
-        <div class="slider-wrap">
-          <div class="slider-header"><span class="slider-label">수강 기간</span><span class="slider-val" id="s-months">12개월</span></div>
-          <input type="range" min="8" max="12" value="12" id="months" oninput="calcProfit()">
+          <div class="slider-header">
+            <span class="slider-label">무료 제공 비율 <span style="color:var(--accent);font-size:11px">← 회의 후 확정 예정</span></span>
+            <span class="slider-val" id="s-free">40%</span>
+          </div>
+          <input type="range" min="10" max="60" value="40" step="5" id="freerate" oninput="calcProfit()">
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">결제일수 = 총일수 ÷ (1 + 무료비율)</div>
         </div>
       </div>
       <div>
         <div class="slider-wrap">
-          <div class="slider-header"><span class="slider-label">실제 1차 합격률</span><span class="slider-val" id="s-pass">65%</span></div>
-          <input type="range" min="30" max="90" value="65" step="5" id="passrate" oninput="calcProfit()">
-        </div>
-        <div class="slider-wrap">
-          <div class="slider-header"><span class="slider-label">태만 퇴출 비율</span><span class="slider-val" id="s-expel">10%</span></div>
-          <input type="range" min="0" max="30" value="10" step="5" id="expelrate" oninput="calcProfit()">
-          <div style="font-size:11px;color:var(--text3);margin-top:2px">퇴출자 = 환불 미발생</div>
+          <div class="slider-header">
+            <span class="slider-label">실제 환불 발생률 <span style="color:var(--text3);font-size:11px">(끝까지 남아 불합격)</span></span>
+            <span class="slider-val" id="s-refund">3%</span>
+          </div>
+          <input type="range" min="0" max="15" value="3" step="1" id="refundrate" oninput="calcProfit()">
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">퇴출·중도이탈은 환불 미발생</div>
         </div>
       </div>
     </div>
   </div>
+
   <div id="profit-result"></div>
+
   <div class="card">
-    <div class="card-title">월 수강료별 손익 비교 <span id="compare-lbl" style="font-weight:400;color:var(--text2);font-size:12px"></span></div>
+    <div class="card-title">등록 기간별 가격 구조 <span id="compare-lbl" style="font-weight:400;color:var(--text2);font-size:12px"></span></div>
     <div style="overflow-x:auto"><table class="tbl" id="compare-tbl"></table></div>
+    <div class="box-info" style="margin-top:12px">결제금액 = 총 등록일수 ÷ (1 + 무료비율) × (기준수강료 ÷ 30일). 무료 제공 기간은 환불 대상 아님.</div>
   </div>
+
 </div>
 
 <!-- ===== 2. 입반 조건 ===== -->
@@ -313,81 +320,70 @@ function goPage(id, btn) {
 /* ── 수익 계산기 ── */
 function fmtW(n){ return Math.round(n).toLocaleString('ko-KR')+'원'; }
 function fmtM(n){ return Math.round(n/10000).toLocaleString('ko-KR')+'만원'; }
+function fmtD(n){ return Math.round(n)+'일'; }
 
 function calcProfit(){
-  var base = parseInt(document.getElementById('base-fee').value)||490000;
-  var gfee = parseInt(document.getElementById('gfee').value)||650000;
-  var stu  = parseInt(document.getElementById('students').value);
-  var mon  = parseInt(document.getElementById('months').value);
-  var pass = parseInt(document.getElementById('passrate').value)/100;
-  var exp  = parseInt(document.getElementById('expelrate').value)/100;
+  var baseDay  = parseInt(document.getElementById('base-day').value)||490000; // 30일 기준
+  var stu      = parseInt(document.getElementById('students').value);
+  var freeRate = parseInt(document.getElementById('freerate').value)/100;
+  var refRate  = parseInt(document.getElementById('refundrate').value)/100;
 
   document.getElementById('s-students').textContent = stu+'명';
-  document.getElementById('s-months').textContent   = mon+'개월';
-  document.getElementById('s-pass').textContent     = Math.round(pass*100)+'%';
-  document.getElementById('s-expel').textContent    = Math.round(exp*100)+'%';
+  document.getElementById('s-free').textContent     = Math.round(freeRate*100)+'%';
+  document.getElementById('s-refund').textContent   = Math.round(refRate*100)+'%';
 
-  var regFee = base * mon;
-  var gFee   = gfee * mon;
-  var prem   = Math.round((gFee/regFee-1)*100);
-  var expN   = Math.floor(stu*exp);
-  var rem    = stu - expN;
-  var failN  = Math.round(rem*(1-pass));
-  var passN  = rem - failN;
-  var totalRev = gFee * stu;
-  var totalRef = gFee * failN;
-  var netRev   = totalRev - totalRef;
-  var regRev   = regFee * stu;
-  var vs       = netRev - regRev;
-  var refRatio = Math.round(totalRef/totalRev*100);
-  var effFail  = Math.round(failN/stu*100);
-  var bep      = Math.round(((1-pass)*(1-exp))/(1-(1-pass)*(1-exp))*100);
-  var safe     = vs >= 0;
-  var comf     = vs >= regRev*0.1;
-  var sc       = safe?(comf?'var(--success-bg)':'var(--accent-bg)'):'var(--warn-bg)';
-  var stc      = safe?(comf?'var(--success-text)':'var(--accent-text)'):'var(--warn-text)';
-  var slbl     = safe?(comf?'안전 구간':'겨우 흑자'):'손실 위험';
+  var dayRate = baseDay / 30; // 1일 단가
+
+  // 등록 기간 옵션 (일 단위)
+  var periods = [300, 330, 360];
+  var mainPeriod = 360; // 대표 기간
+
+  // 대표(360일) 기준 계산
+  var totalDays  = mainPeriod;
+  var payDays    = totalDays / (1 + freeRate);
+  var freeDays   = totalDays - payDays;
+  var payAmt     = payDays * dayRate;         // 1인 결제금액
+  var refundAmt  = payAmt;                    // 불합격 시 전액환불 (결제금액 기준)
+
+  var totalRev   = payAmt * stu;
+  var refN       = Math.round(stu * refRate);
+  var totalRef   = refundAmt * refN;
+  var netRev     = totalRev - totalRef;
 
   document.getElementById('profit-result').innerHTML =
-    '<div class="result-box" style="background:'+sc+'">'+
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
-        '<div>'+
-          '<div style="font-size:12px;color:'+stc+';margin-bottom:4px">환불 후 순수익 · '+slbl+'</div>'+
-          '<div style="font-size:26px;font-weight:700;color:'+stc+'">'+fmtM(netRev)+'</div>'+
-          '<div style="font-size:12px;color:'+stc+';margin-top:4px">일반반 대비 '+(safe?'+':'')+fmtM(vs)+' · '+stu+'명 중 합격 '+passN+'명 / 환불 '+failN+'명 / 퇴출 '+expN+'명</div>'+
-        '</div>'+
-      '</div>'+
+    '<div class="g4" style="margin-bottom:14px">'+
+      '<div class="metric"><div class="metric-label">1인 결제금액 (360일)</div><div class="metric-val" style="font-size:16px">'+fmtM(payAmt)+'</div><div class="metric-sub">결제 '+fmtD(payDays)+' · 무료 '+fmtD(freeDays)+'</div></div>'+
+      '<div class="metric"><div class="metric-label">총 수입 ('+stu+'명)</div><div class="metric-val" style="font-size:16px">'+fmtM(totalRev)+'</div><div class="metric-sub">환불 전</div></div>'+
+      '<div class="metric"><div class="metric-label">환불 인원 / 금액</div><div class="metric-val">'+refN+'명</div><div class="metric-sub" style="color:var(--danger)">-'+fmtM(totalRef)+'</div></div>'+
+      '<div class="metric"><div class="metric-label">환불 후 순수입</div><div class="metric-val" style="font-size:16px;color:var(--success)">'+fmtM(netRev)+'</div><div class="metric-sub">환불률 '+Math.round(refRate*100)+'% 가정</div></div>'+
     '</div>'+
-    '<div class="g4">'+
-      '<div class="metric"><div class="metric-label">일반 수강료</div><div class="metric-val" style="font-size:16px">'+fmtM(regFee)+'</div><div class="metric-sub">'+mon+'개월/1인</div></div>'+
-      '<div class="metric"><div class="metric-label">보장반 수강료</div><div class="metric-val" style="font-size:16px">'+fmtM(gFee)+'</div><div class="metric-sub">+'+prem+'% 프리미엄</div></div>'+
-      '<div class="metric"><div class="metric-label">실질 환불 인원</div><div class="metric-val">'+failN+'명</div><div class="metric-sub">전체의 '+effFail+'%</div></div>'+
-      '<div class="metric"><div class="metric-label">환불 총액</div><div class="metric-val" style="font-size:16px;color:var(--danger)">'+fmtM(totalRef)+'</div><div class="metric-sub">수입의 '+refRatio+'%</div></div>'+
-    '</div>'+
-    '<div class="card" style="margin-bottom:14px">'+
-      '<div class="card-title">손익분기 분석</div>'+
-      '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px">'+
-        '<span>최소 손익분기 프리미엄: <strong style="color:var(--text)">+'+bep+'%</strong></span>'+
-        '<span>현재: <strong style="color:var(--text)">+'+prem+'%</strong> (차이 <strong style="color:'+(safe?'var(--success)':'var(--danger)')+'">'+((safe?'+':'')+( prem-bep))+'%p</strong>)</span>'+
-      '</div>'+
-      '<div class="bar-wrap"><div class="bar" style="width:'+Math.min(100,Math.max(0,Math.round(prem/150*100)))+'%;background:'+(safe?'#16a34a':'#dc2626')+'"></div></div>'+
-    '</div>'+
-    (refRatio>40?'<div class="box-warn">주의: 환불 비율이 수입의 '+refRatio+'%입니다. 환불 적립금 분리 관리 필수.</div>':'');
+    (refRate<=0.05?
+      '<div class="box-success">환불 발생률 '+Math.round(refRate*100)+'% — 관리 시스템이 제대로 작동하면 환불 리스크는 미미해요. 수익 구조의 핵심은 장기등록 유도입니다.</div>':
+      '<div class="box-warn">환불 발생률 '+Math.round(refRate*100)+'% — 관리 기준을 더 촘촘히 하면 이 수치를 낮출 수 있어요.</div>');
 
-  var opts=[550000,600000,650000,700000,750000,800000,900000];
-  document.getElementById('compare-lbl').textContent='· 합격률 '+Math.round(pass*100)+'% · 퇴출 '+Math.round(exp*100)+'% 기준';
-  var rows=opts.map(function(mo){
-    var fee=mo*mon, p=Math.round((fee/regFee-1)*100);
-    var rev=fee*stu, ref=fee*failN, net=rev-ref, v=net-regRev, ok=v>=0, cur=mo===gfee;
+  // 기간별 비교표
+  var allPeriods = [240, 270, 300, 330, 360];
+  document.getElementById('compare-lbl').textContent = '· 무료 제공 '+Math.round(freeRate*100)+'% · 환불률 '+Math.round(refRate*100)+'% 기준';
+  var rows = allPeriods.map(function(days){
+    var pd = days/(1+freeRate);
+    var fd = days - pd;
+    var amt = pd * dayRate;
+    var refAmtRow = amt * refRate * stu;
+    var totalRevRow = amt * stu;
+    var netRow = totalRevRow - refAmtRow;
+    var cur = days === mainPeriod;
     return '<tr'+(cur?' class="hl"':'')+'>'+
-      '<td>'+(cur?'▶ ':'')+fmtW(mo)+'/월</td>'+
-      '<td>'+fmtM(fee)+'</td><td>+'+p+'%</td>'+
-      '<td style="color:var(--danger)">-'+fmtM(ref)+'</td>'+
-      '<td style="font-weight:'+(cur?700:400)+'">'+fmtM(net)+'</td>'+
-      '<td style="color:'+(ok?'var(--success)':'var(--danger)')+'">'+(ok?'+':'')+fmtM(v)+'</td></tr>';
+      '<td>'+(cur?'▶ ':'')+days+'일 ('+Math.round(days/30)+'개월)</td>'+
+      '<td>'+fmtD(Math.round(pd))+'</td>'+
+      '<td>'+fmtD(Math.round(fd))+'</td>'+
+      '<td style="font-weight:'+(cur?700:400)+'">'+fmtM(amt)+'</td>'+
+      '<td>'+fmtM(totalRevRow)+'</td>'+
+      '<td style="color:var(--danger)">-'+fmtM(refAmtRow)+'</td>'+
+      '<td style="font-weight:'+(cur?700:400)+';color:var(--success)">'+fmtM(netRow)+'</td>'+
+    '</tr>';
   }).join('');
   document.getElementById('compare-tbl').innerHTML=
-    '<thead><tr><th>월 수강료</th><th>총 수강료</th><th>프리미엄</th><th>환불 총액</th><th>순수익</th><th>일반 대비</th></tr></thead><tbody>'+rows+'</tbody>';
+    '<thead><tr><th>등록 기간</th><th>결제일수</th><th>무료일수</th><th>1인 결제금액</th><th>총수입('+stu+'명)</th><th>환불액</th><th>순수입</th></tr></thead><tbody>'+rows+'</tbody>';
 }
 
 /* ── 시뮬레이터 ── */
